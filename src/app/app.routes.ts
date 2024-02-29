@@ -4,5 +4,4 @@ import {UserCardComponent} from "./components/user-card/user-card.component";
 
 export const appRoutes: Routes = [
   { path: 'users', component: UsersListComponent },
-  { path: 'user', component: UserCardComponent },
 ];

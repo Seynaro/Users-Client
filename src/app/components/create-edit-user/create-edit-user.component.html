@@ -1,0 +1,56 @@
+<div [formGroup]="myForm">
+  <mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Имя</mat-label>
+      <input matInput
+             formControlName="name">
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Username</mat-label>
+      <input matInput
+             formControlName="username">
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput
+             formControlName="email">
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Телефон</mat-label>
+      <input matInput
+             min="5"
+             required
+             formControlName="phone">
+      @if (!myForm.controls.phone.valid && myForm.controls.phone.touched) {
+        <mat-hint>Minlength number 5 </mat-hint>
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+  @if(!data.isEdit){
+    <mat-dialog-actions>
+      <button mat-raised-button (click)="onNoClick()">No Thanks</button>
+
+      @if(myForm.valid){
+        <button mat-raised-button [mat-dialog-close]="myForm.value">Create User</button>
+      } @else {
+        <button mat-raised-button disabled>Создать пользователя</button>
+      }
+    </mat-dialog-actions>
+  } @else {
+    <mat-dialog-actions>
+      <button mat-raised-button (click)="onNoClick()">Не сохранять</button>
+
+      @if(myForm.valid){
+        <button mat-raised-button [mat-dialog-close]="myForm.value">Сохранить</button>
+      } @else {
+        <button mat-raised-button disabled>Сохранить</button>
+      }
+    </mat-dialog-actions>
+  }
+</div>

@@ -1,4 +1,7 @@
-<div *ngFor="let user of users">
-  <app-user-card [user]="user" (deleteUser)="deleteUser($event)"></app-user-card>
-</div>
+<ng-container *ngFor="let user of usersService.users$ | async">
+  <app-user-card [user]="user" (id)="deleteUser($event)"></app-user-card>
+</ng-container>
 
+<div class="card__create">
+  <button mat-raised-button color="primary" (click)="openDialog()">Добавить пользователя</button>
+</div>

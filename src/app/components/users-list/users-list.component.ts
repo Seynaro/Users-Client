@@ -1,8 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {User} from "../../models/user";
 import {UserCardComponent} from "../user-card/user-card.component";
-import {UsersService} from "../../services/users-service.service";
+import {UsersService} from "../../services/users.service";
 import {AsyncPipe, NgForOf} from "@angular/common";
+import {MatButtonModule} from '@angular/material/button';
+import {MatDialog} from "@angular/material/dialog";
+import {LocalStorageService} from "../../services/localstorage.service";
+import {map, take} from "rxjs";
+import {CreateEditUserComponent} from "../create-edit-user/create-edit-user.component";
 
 @Component({
   selector: 'app-users-list',
@@ -10,37 +15,42 @@ import {AsyncPipe, NgForOf} from "@angular/common";
   imports: [
     UserCardComponent,
     AsyncPipe,
-    NgForOf
+    NgForOf,
+    MatButtonModule,
   ],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.css'
 })
-export class UsersListComponent implements OnInit {
+export class UsersListComponent {
+  constructor(public dialog: MatDialog){
+    this.setLocal();
+  }
+  public usersService: UsersService = inject(UsersService);
+  public localService: LocalStorageService = inject(LocalStorageService);
 
-  users!: User[]
-
-  constructor(private usersService: UsersService) {
+  deleteUser(id:number): void{
+    this.usersService.deleteUser(id);
   }
 
-  ngOnInit(): void {
-    this.loadUsers();
-
+  openDialog():void{
+    const dialogRef = this.dialog.open(CreateEditUserComponent, {data:{}});
+    dialogRef.afterClosed().pipe(
+      map((myForm: User) => {
+        if(myForm != undefined){
+          this.usersService.addUser(myForm)
+          console.log(myForm)
+        }
+      }),
+      take(1)
+    ).subscribe()
   }
 
-  loadUsers(): void {
-    this.usersService.fetchUsers().subscribe(users => {
-        this.users = users;
-        console.log(users)
-      },
-      error => {
-        console.error('Error fetching users:', error);
-      }
-    )
+  setLocal(): void{
+    const data: User[] | null = this.localService.getItem();
+    if(data === null){
+      this.usersService.loadUserss();
+    } else {
+      this.usersService.local(data);
+    }
   }
-
-  deleteUser(userId: number): void {
-    this.users = this.users.filter(user => user.id !== userId);
-    this.usersService.deleteUser(userId);
-  }
-
 }

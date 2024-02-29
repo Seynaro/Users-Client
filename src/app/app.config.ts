@@ -3,12 +3,13 @@ import {provideRouter, withEnabledBlockingInitialNavigation} from '@angular/rout
 
 import {appRoutes} from './app.routes';
 import {provideHttpClient} from "@angular/common/http";
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
-    provideHttpClient(),
-  ]
+    provideHttpClient(), provideAnimationsAsync(), provideAnimationsAsync(),
+  ],
 };
