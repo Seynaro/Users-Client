@@ -4,7 +4,6 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatDialog} from "@angular/material/dialog";
 import {map, takeUntil} from "rxjs";
 import {CreateEditUserComponent} from "../create-edit-user/create-edit-user.component";
-import {UsersService} from "../../services/users.service";
 import {MatCardModule} from "@angular/material/card";
 
 @Component({
@@ -20,7 +19,6 @@ import {MatCardModule} from "@angular/material/card";
 export class UserCardComponent {
   constructor(
     public dialod: MatDialog,
-    public userService: UsersService,
   ){}
 
   @Input() user?: User;
@@ -36,7 +34,7 @@ export class UserCardComponent {
     dialogEdit.afterClosed().pipe(
       map((edit: User) => {
         if(edit != undefined){
-          this.userService.saveEditDataUser(edit);
+          //this.userService.saveEditDataUser(edit);
         }
         takeUntil(dialogEdit.afterClosed())
       }),

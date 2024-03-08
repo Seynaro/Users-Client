@@ -9,7 +9,6 @@ import {
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
-import {UsersService} from "../../services/users.service";
 
 @Component({
   selector: 'app-create-edit-user',
@@ -28,7 +27,6 @@ import {UsersService} from "../../services/users.service";
   styleUrl: './create-edit-user.component.css'
 })
 export class CreateEditUserComponent {
-   public UserService = inject(UsersService);
 
   constructor(
     public dialogRef: MatDialogRef<CreateEditUserComponent>,

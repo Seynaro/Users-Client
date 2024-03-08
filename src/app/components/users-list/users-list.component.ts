@@ -1,13 +1,14 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {User} from "../../models/user";
 import {UserCardComponent} from "../user-card/user-card.component";
-import {UsersService} from "../../services/users.service";
 import {AsyncPipe, NgForOf} from "@angular/common";
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialog} from "@angular/material/dialog";
-import {LocalStorageService} from "../../services/localstorage.service";
 import {map, take} from "rxjs";
 import {CreateEditUserComponent} from "../create-edit-user/create-edit-user.component";
+import {Store} from "@ngrx/store";
+import {addUser, deleteUser, loadUsers} from "../../state/users.actions";
+import {selectUsers} from "../../state/users.selectors";
 
 @Component({
   selector: 'app-users-list',
@@ -21,36 +22,28 @@ import {CreateEditUserComponent} from "../create-edit-user/create-edit-user.comp
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.css'
 })
-export class UsersListComponent {
-  constructor(public dialog: MatDialog){
-    this.setLocal();
-  }
-  public usersService: UsersService = inject(UsersService);
-  public localService: LocalStorageService = inject(LocalStorageService);
-
-  deleteUser(id:number): void{
-    this.usersService.deleteUser(id);
+export class UsersListComponent implements OnInit{
+  constructor(public dialog: MatDialog,
+  ){
   }
 
-  openDialog():void{
-    const dialogRef = this.dialog.open(CreateEditUserComponent, {data:{}});
-    dialogRef.afterClosed().pipe(
-      map((myForm: User) => {
-        if(myForm != undefined){
-          this.usersService.addUser(myForm)
-          console.log(myForm)
-        }
-      }),
-      take(1)
-    ).subscribe()
+  private store = inject(Store)
+  readonly users$= this.store.select(selectUsers)
+
+  deleteUser(deletedUser: number): void{
+    this.store.dispatch(deleteUser({deletedUser}))
   }
 
-  setLocal(): void{
-    const data: User[] | null = this.localService.getItem();
-    if(data === null){
-      this.usersService.loadUserss();
-    } else {
-      this.usersService.local(data);
-    }
+  openDialog(): void {
+    const dialogRef = this.dialog.open(CreateEditUserComponent, { data: {} });
+    dialogRef.afterClosed().subscribe((newUser: User) => {
+      if (newUser) {
+        this.store.dispatch(addUser({ newUser }));
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    this.store.dispatch(loadUsers())
   }
 }
