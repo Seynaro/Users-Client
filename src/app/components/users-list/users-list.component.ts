@@ -1,14 +1,13 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {User} from "../../models/user";
 import {UserCardComponent} from "../user-card/user-card.component";
 import {AsyncPipe, NgForOf} from "@angular/common";
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialog} from "@angular/material/dialog";
-import {map, take} from "rxjs";
 import {CreateEditUserComponent} from "../create-edit-user/create-edit-user.component";
 import {Store} from "@ngrx/store";
 import {addUser, deleteUser, loadUsers} from "../../state/users.actions";
 import {selectUsers} from "../../state/users.selectors";
+import {User} from "../../models/user";
 
 @Component({
   selector: 'app-users-list',

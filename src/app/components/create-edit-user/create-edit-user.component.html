@@ -33,7 +33,7 @@
 
   @if (!data.isEdit) {
     <mat-dialog-actions>
-      <button mat-raised-button (click)="onNoClick()">No Thanks</button>
+      <button mat-raised-button (click)="onNoClick()">Отменить</button>
 
       @if (myForm.valid) {
         <button mat-raised-button [mat-dialog-close]="myForm.value">Create User</button>

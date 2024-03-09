@@ -1,10 +1,12 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {User} from "../../models/user";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDialog} from "@angular/material/dialog";
 import {map, takeUntil} from "rxjs";
 import {CreateEditUserComponent} from "../create-edit-user/create-edit-user.component";
 import {MatCardModule} from "@angular/material/card";
+import {Store} from "@ngrx/store";
+import {editUser} from "../../state/users.actions";
 
 @Component({
   selector: 'app-user-card',
@@ -21,6 +23,7 @@ export class UserCardComponent {
     public dialod: MatDialog,
   ){}
 
+  private store = inject(Store)
   @Input() user?: User;
   @Output() id = new EventEmitter<number>();
 
@@ -32,9 +35,9 @@ export class UserCardComponent {
   openDialog(id:number | undefined): void{
     const dialogEdit = this.dialod.open(CreateEditUserComponent, {data: {isEdit: this.isEdit, dataUser: this.user}});
     dialogEdit.afterClosed().pipe(
-      map((edit: User) => {
-        if(edit != undefined){
-          //this.userService.saveEditDataUser(edit);
+      map((editedUser: User) => {
+        if(editedUser != undefined){
+          this.store.dispatch(editUser({editedUser}))
         }
         takeUntil(dialogEdit.afterClosed())
       }),

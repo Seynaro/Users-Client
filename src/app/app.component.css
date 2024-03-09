@@ -1,0 +1,9 @@
+.nav {
+  display: flex;
+
+  margin-left: 80%
+}
+
+.nav-button {
+  margin-left: 10px;
+}
