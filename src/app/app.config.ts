@@ -7,7 +7,7 @@ import {provideStore} from '@ngrx/store';
 import {provideEffects} from '@ngrx/effects';
 import {UserEffects} from "./state/users.effects";
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import {usersFeatureKey, usersReducer} from "./state/users.reducer";
+import {usersReducer} from "./state/users.reducer";
 
 
 export const appConfig: ApplicationConfig = {

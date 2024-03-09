@@ -32,7 +32,7 @@ export class UserCardComponent {
   }
 
   public isEdit: boolean = true;
-  openDialog(id:number | undefined): void{
+  openDialog(): void{
     const dialogEdit = this.dialod.open(CreateEditUserComponent, {data: {isEdit: this.isEdit, dataUser: this.user}});
     dialogEdit.afterClosed().pipe(
       map((editedUser: User) => {
